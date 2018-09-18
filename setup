@@ -22,9 +22,15 @@ if [[ -z "$HOST_PUBKEY" ]]; then
   exit 1
 fi
 
+echo "Creating user $USERNAME..."
+
 useradd -g sudo -s "$(which bash)" -d /home/$USERNAME -p "$PASSWORD" $USERNAME
 
+echo "Backing up $SSH_CONFIG_PATH..."
+
 mv $SSH_CONFIG_PATH $SSH_CONFIG_PATH.bak
+
+echo "Writing config to $SSH_CONFIG_PATH..."
 
 echo "Port $SSH_PORT
 ChallengeResponseAuthentication no
@@ -38,7 +44,11 @@ AcceptEnv LANG LC_*
 Subsystem sftp /usr/lib/openssh/sftp-server
 " > $SSH_CONFIG_PATH
 
+echo "Writing pubkey $HOST_PUBKEY to $USERNAME's authorized keys..."
+
 su -c 'mkdir -p $HOME/.ssh;
 echo "$HOST_PUBKEY" > $HOME/.ssh/authorized_keys' $USERNAME
+
+echo "Restarting SSH service..."
 
 service ssh restart
