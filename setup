@@ -39,7 +39,7 @@ mv $SSH_CONFIG_PATH $SSH_CONFIG_PATH.bak
 
 echo "Writing config to $SSH_CONFIG_PATH..."
 
-echo "Port $SSH_PORT
+echo "Port "$SSH_PORT"
 ChallengeResponseAuthentication no
 PasswordAuthentication no
 UsePAM no
@@ -51,10 +51,10 @@ AcceptEnv LANG LC_*
 Subsystem sftp /usr/lib/openssh/sftp-server
 " > $SSH_CONFIG_PATH
 
-echo "Writing pubkey $HOST_PUBKEY to $USERNAME's authorized keys..."
+echo "Writing pubkey "$HOST_PUBKEY" to "$USERNAME"'s authorized keys..."
 
-su -c 'mkdir -p $HOME/.ssh;
-echo "$HOST_PUBKEY" > $HOME/.ssh/authorized_keys' $USERNAME
+su -c "mkdir -p \$HOME/.ssh;
+echo "$HOST_PUBKEY" > \$HOME/.ssh/authorized_keys" $USERNAME
 
 echo "Restarting SSH service..."
 
