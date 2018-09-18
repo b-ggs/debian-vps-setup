@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+echo "$USERNAME"
+echo "$PASSWORD"
+echo "$HOST_PUBKEY"
+echo "$SSH_PORT"
+
+if [[ -z "$USERNAME" ]]; then
+  echo "Missing USERNAME!"
+  exit 1
+fi
+
+if [[ -z "$PASSWORD" ]]; then
+  echo "Missing PASSWORD!"
+  exit 1
+fi
+
+if [[ -z "$HOST_PUBKEY" ]]; then
+  echo "Missing HOST_PUBKEY!"
+  exit 1
+fi
+
+if [[ -z "$SSH_PORT" ]]; then
+  echo "Missing SSH_PORT!"
+  exit 1
+fi
+
+useradd -g sudo -s "$(which bash)" -d /home/$USERNAME -p "$PASSWORD" $USERNAME
+
+${SSH_CONFIG_PATH:-"/etc/ssh/sshd_config"}
+
+mv $SSH_CONFIG_PATH $SSH_CONFIG_PATH.bak
+
+echo "Port $SSH_PORT
+ChallengeResponseAuthentication no
+PasswordAuthentication no
+UsePAM no
+PermitRootLogin no
+X11Forwarding no
+IgnoreRhosts yes
+PrintMotd no
+AcceptEnv LANG LC_*
+Subsystem sftp /usr/lib/openssh/sftp-server
+" > $SSH_CONFIG_PATH
+
+su -c 'mkdir -p $HOME/.ssh;
+echo "$HOST_PUBKEY" > $HOME/.ssh/authorized_keys' $USERNAME
+
+service ssh restart
