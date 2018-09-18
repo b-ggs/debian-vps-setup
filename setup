@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
-echo "$USERNAME"
-echo "$PASSWORD"
-echo "$HOST_PUBKEY"
-echo "$SSH_PORT"
+USERNAME="$1"
+PASSWORD="$2"
+HOST_PUBKEY="$3"
+SSH_PORT="${4:-"22"}"
+USER_SHELL="${5:-"$(which bash)"}"
+SSH_CONFIG_PATH="${6:-"/etc/ssh/sshd_config"}"
 
 if [[ -z "$USERNAME" ]]; then
   echo "Missing USERNAME!"
@@ -20,14 +22,7 @@ if [[ -z "$HOST_PUBKEY" ]]; then
   exit 1
 fi
 
-if [[ -z "$SSH_PORT" ]]; then
-  echo "Missing SSH_PORT!"
-  exit 1
-fi
-
 useradd -g sudo -s "$(which bash)" -d /home/$USERNAME -p "$PASSWORD" $USERNAME
-
-${SSH_CONFIG_PATH:-"/etc/ssh/sshd_config"}
 
 mv $SSH_CONFIG_PATH $SSH_CONFIG_PATH.bak
 
