@@ -11,7 +11,7 @@ This is to be run on the machine you want to give key-authenticated SSH access t
 ```bash
 ssh root@<REMOTE HOST> \
   "curl -fsSL https://raw.githubusercontent.com/b-ggs/ubuntu-vps-setup/master/setup | \
-  /usr/bin/env bash -- <USERNAME> \
+  /usr/bin/env bash -s <USERNAME> \
   <PASSWORD> \
   <YOUR MACHINE'S PUBLIC KEY>"
 ```
@@ -37,13 +37,7 @@ ssh root@<REMOTE HOST> \
 ```bash
 ssh root@<REMOTE HOST> \
   "curl -fsSL https://raw.githubusercontent.com/b-ggs/ubuntu-vps-setup/master/setup | \
-  /usr/bin/env bash -- "boggs" \
+  /usr/bin/env bash -s "boggs" \
   "password" \
   "$(cat $HOME/.ssh/id_rsa.pub)""
 ```
-
-ssh hang-the-dj \
-  "curl -fsSL https://raw.githubusercontent.com/b-ggs/ubuntu-vps-setup/master/setup | \
-  /usr/bin/env bash -- "boggs" \
-  "password" \
-  "$(cat $HOME/.ssh/id_rsa.pub)""

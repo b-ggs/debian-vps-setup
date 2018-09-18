@@ -7,6 +7,13 @@ SSH_PORT="${4:-"22"}"
 USER_SHELL="${5:-"$(which bash)"}"
 SSH_CONFIG_PATH="${6:-"/etc/ssh/sshd_config"}"
 
+echo "$USERNAME"
+echo "$PASSWORD"
+echo "$HOST_PUBKEY"
+echo "$SSH_PORT"
+echo "$USER_SHELL"
+echo "$SSH_CONFIG_PATH"
+
 if [[ -z "$USERNAME" ]]; then
   echo "Missing USERNAME!"
   exit 1
@@ -24,7 +31,7 @@ fi
 
 echo "Creating user $USERNAME..."
 
-useradd -g sudo -s "$(which bash)" -d /home/$USERNAME -p "$PASSWORD" $USERNAME
+useradd -g sudo -s "$(which bash)" -m -d "/home/$USERNAME" -p "$PASSWORD" "$USERNAME"
 
 echo "Backing up $SSH_CONFIG_PATH..."
 
