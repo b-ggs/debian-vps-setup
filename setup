@@ -1,19 +1,5 @@
 #!/usr/bin/env bash
 
-USERNAME="$1"
-PASSWORD="$2"
-HOST_PUBKEY="$3"
-SSH_PORT="${4:-"22"}"
-USER_SHELL="${5:-"$(which bash)"}"
-SSH_CONFIG_PATH="${6:-"/etc/ssh/sshd_config"}"
-
-echo "$USERNAME"
-echo "$PASSWORD"
-echo "$HOST_PUBKEY"
-echo "$SSH_PORT"
-echo "$USER_SHELL"
-echo "$SSH_CONFIG_PATH"
-
 if [[ -z "$USERNAME" ]]; then
   echo "Missing USERNAME!"
   exit 1
@@ -24,20 +10,25 @@ if [[ -z "$PASSWORD" ]]; then
   exit 1
 fi
 
-if [[ -z "$HOST_PUBKEY" ]]; then
+if [[ -z "${HOST_PUBKEY[@]}" ]]; then
   echo "Missing HOST_PUBKEY!"
   exit 1
 fi
 
-echo "Creating user $USERNAME..."
+SSH_PORT="${SSH_PORT:-"22"}"
+SSH_CONFIG_PATH="${SSH_CONFIG_PATH:-"/etc/ssh/sshd_config"}"
 
-useradd -g sudo -s "$(which bash)" -m -d "/home/$USERNAME" -p "$PASSWORD" "$USERNAME"
+echo "Creating user "$USERNAME"..."
 
-echo "Backing up $SSH_CONFIG_PATH..."
+USER_HOME="/home/$USERNAME"
 
-mv $SSH_CONFIG_PATH $SSH_CONFIG_PATH.bak
+useradd -g sudo -s "$(which bash)" -m -d $USER_HOME -p "$PASSWORD" "$USERNAME"
 
-echo "Writing config to $SSH_CONFIG_PATH..."
+echo "Backing up "$SSH_CONFIG_PATH"..."
+
+mv "$SSH_CONFIG_PATH" "$SSH_CONFIG_PATH".bak
+
+echo "Writing config to "$SSH_CONFIG_PATH"..."
 
 echo "Port "$SSH_PORT"
 ChallengeResponseAuthentication no
@@ -49,12 +40,12 @@ IgnoreRhosts yes
 PrintMotd no
 AcceptEnv LANG LC_*
 Subsystem sftp /usr/lib/openssh/sftp-server
-" > $SSH_CONFIG_PATH
+" > "$SSH_CONFIG_PATH"
 
 echo "Writing pubkey "$HOST_PUBKEY" to "$USERNAME"'s authorized keys..."
 
-su -c "mkdir -p \$HOME/.ssh;
-echo "$HOST_PUBKEY" > \$HOME/.ssh/authorized_keys" $USERNAME
+mkdir -p "$USER_HOME/.ssh"
+echo "${HOST_PUBKEY[@]}" > "$USER_HOME/.ssh/authorized_keys"
 
 echo "Restarting SSH service..."
 
