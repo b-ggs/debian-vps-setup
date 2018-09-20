@@ -42,7 +42,7 @@ AcceptEnv LANG LC_*
 Subsystem sftp /usr/lib/openssh/sftp-server
 " > "$SSH_CONFIG_PATH"
 
-echo "Writing pubkey "$HOST_PUBKEY" to "$USERNAME"'s authorized keys..."
+echo "Writing pubkey to "$USERNAME"'s authorized keys..."
 
 mkdir -p "$USER_HOME/.ssh"
 echo "${HOST_PUBKEY[@]}" > "$USER_HOME/.ssh/authorized_keys"
