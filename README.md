@@ -2,42 +2,38 @@
 
 setup script for my ubuntu-based instances
 
+## What it does
+
+* Creates a new user and adds it to the `sudo` group.
+
+* Disables login as `root`
+
+* Disables password authentication
+
+* Adds a public key to the new user's `authorized_keys`
+
 ## Usage
 
-This is to be run on the machine you want to give key-authenticated SSH access to.
-
-**TL;DR**
-
 ```bash
 ssh root@<REMOTE HOST> \
   "curl -fsSL https://raw.githubusercontent.com/b-ggs/ubuntu-vps-setup/master/setup | \
-  /usr/bin/env bash -s <USERNAME> \
-  <PASSWORD> \
-  <YOUR MACHINE'S PUBLIC KEY>"
+  USERNAME=boggs \
+  HOST_PUBKEY=\""$(cat $HOME/.ssh/id_rsa.pub)"\" \
+  /usr/bin/env bash"
 ```
 
-**Positional arguments**
+**WARNING:** This script sets the new user's password to `p@ssw0rd` *(or the password you specify with the PASSWORD env var)*. **You should change this with `passwd` on your first login!**
 
-\* - required
+### Environment Variables
 
-* `$1`* - The username of the nonroot user that will be created
+* `USERNAME` *(required)* - The username of the nonroot user that will be created
 
-* `$2`* - The password of the new user. Consider generating this with OpenSSL on your local machine
+* `HOST_PUBKEY` *(required)* - The public key to be added to the new user's `authorized_keys`
 
-* `$3`* - The public key to be added to the new user's `authorized_keys`
+* `PASSWORD` - The password of the new user if you really don't care about security? *(default: `p@ssw0rd`)*
 
-* `$4` - Preferred port to access SSH through *(default: 22)*
+* `SSH_PORT` - Preferred port to access SSH through *(default: `22`)*
 
-* `$5` - Path to the new user's default shell *(default: `$(which bash)`)*
+* `USER_SHELL` - Path to the new user's default shell *(default: `$(which bash)`)*
 
-* `$6` - Path to SSH config *(default: `/etc/ssh/sshd_config`)*
-
-**Example**
-
-```bash
-ssh root@<REMOTE HOST> \
-  "curl -fsSL https://raw.githubusercontent.com/b-ggs/ubuntu-vps-setup/master/setup | \
-  /usr/bin/env bash -s "boggs" \
-  "password" \
-  "$(cat $HOME/.ssh/id_rsa.pub)""
-```
+* `SSH_CONFIG_PATH` - Path to SSH config *(default: `/etc/ssh/sshd_config`)*
