@@ -5,8 +5,8 @@ if [[ -z "$USERNAME" ]]; then
   exit 1
 fi
 
-if [[ -z "$PASSWORD" ]]; then
-  echo "Missing PASSWORD!"
+if [[ -z "$ENCRYPTED_PASSWORD" ]]; then
+  echo "Missing ENCRYPTED_PASSWORD!"
   exit 1
 fi
 
@@ -22,7 +22,7 @@ echo "Creating user "$USERNAME"..."
 
 USER_HOME="/home/$USERNAME"
 
-useradd -g sudo -s "$(which bash)" -m -d $USER_HOME -p "$PASSWORD" "$USERNAME"
+useradd -g sudo -s "$(which bash)" -m -d $USER_HOME -p "$ENCRYPTED_PASSWORD" "$USERNAME"
 
 echo "Backing up "$SSH_CONFIG_PATH"..."
 
