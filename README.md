@@ -37,3 +37,12 @@ ssh root@<REMOTE HOST> \
 * `USER_SHELL` - Path to the new user's default shell *(default: `$(which bash)`)*
 
 * `SSH_CONFIG_PATH` - Path to SSH config *(default: `/etc/ssh/sshd_config`)*
+
+## Testing
+
+Included are a Dockerfile based on `debian:latest` and test scripts to verify that the setup script works.
+
+```bash
+test/scripts/build # builds the Docker image
+test/scripts/run # prints the created user's $USER and authorized_keys
+```

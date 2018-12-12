@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+docker build -t debian-vps-setup $(dirname "$0")/../.. -f $(dirname "$0")/../Dockerfile
