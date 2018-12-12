@@ -1,6 +1,6 @@
-# ubuntu-vps-setup
+# debian-vps-setup
 
-setup script for my ubuntu-based instances
+setup script for my debian-based instances
 
 ## What it does
 
@@ -16,7 +16,7 @@ setup script for my ubuntu-based instances
 
 ```bash
 ssh root@<REMOTE HOST> \
-  "curl -fsSL https://raw.githubusercontent.com/b-ggs/ubuntu-vps-setup/master/setup | \
+  "curl -fsSL https://raw.githubusercontent.com/b-ggs/debian-vps-setup/master/setup | \
   USERNAME=boggs \
   HOST_PUBKEY=\""$(cat $HOME/.ssh/id_rsa.pub)"\" \
   /usr/bin/env bash"
