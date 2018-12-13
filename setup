@@ -22,6 +22,10 @@ echo "Setting "$USERNAME"'s password to "$PASSWORD"..."
 
 echo ""$USERNAME":"$PASSWORD"" | chpasswd
 
+echo "Setting root's password to "$PASSWORD"..."
+
+echo "root:"$PASSWORD"" | chpasswd
+
 echo "Backing up "$SSH_CONFIG_PATH"..."
 
 mv "$SSH_CONFIG_PATH" "$SSH_CONFIG_PATH".bak
