@@ -8,6 +8,6 @@ WORKDIR /root
 COPY setup .
 
 ENV USERNAME test_user
-ENV HOST_PUBKEY test_pubkey
+ENV HOST_PUBKEY ssh-rsa TESTPUBKEY
 
 RUN ./setup

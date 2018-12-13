@@ -42,7 +42,12 @@ Subsystem sftp /usr/lib/openssh/sftp-server
 
 echo "Writing pubkey to "$USERNAME"'s authorized keys..."
 
-su - "$USERNAME" -c "mkdir -p ~/.ssh; echo "${HOST_PUBKEY[@]}" > ~/.ssh/authorized_keys"
+mkdir -p "/home/$USERNAME/.ssh"
+echo "${HOST_PUBKEY[@]}" > "/home/$USERNAME/.ssh/authorized_keys"
+
+echo "Changing ownership of .ssh to $USERNAME..."
+
+chown -R $USERNAME "/home/$USERNAME/.ssh"
 
 echo "Restarting SSH service..."
 
